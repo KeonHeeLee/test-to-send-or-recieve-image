@@ -6,7 +6,7 @@ This repo is only used to test sending or recieving image on flask framework
 ```
 # example
 
-<font color=blue>app</font> = Flask(__name__)
+app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route("/download/<filename>", methods=["GET"])
