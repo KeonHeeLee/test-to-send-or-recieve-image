@@ -3,8 +3,6 @@ This repo is only used to test sending or recieving image on flask framework
 
 ## 2018-05-02 result
 
-- Flask's methods "send_file()" and "send_from_directory()" is only useful, if you provide a link to be available to download file.
-
 ```
 # example
 
@@ -19,5 +17,7 @@ if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug = True)
 ```
 
+
+- Flask's "send_file()" and "send_from_directory()" is only useful, if you provide a link to be available to download file.
 - This case is only available to download **the filename in UPLOAD_FOLDER** metioned **in url's rule**.
 - Therefore, I'll make thread to send or recieve image-file.
