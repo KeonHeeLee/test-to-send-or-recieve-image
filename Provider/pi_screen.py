@@ -1,11 +1,15 @@
 import time
 from PIL import Image
+from requests_toolbelt import MultipartEncoder
+import requests
+
 
 class screen():
     def __init__(self):
         self.PATH = "screenshot/"
         self.DEFAULT_NAME = "screenshot/clone.jpg"
         self.ERROR_STATUS = "ERROR: screen.copy_image() func"
+        self.URL = "http://localhost:8000/uploaded"
 
     def copy_image(self):
         now = time.localtime()
@@ -18,14 +22,14 @@ class screen():
 
         return filename
 
-    def send_image(self):
+    def send_image_to_server(self, filename):
+        print("Post Server :" + self.URL + ", filname :" + filename)
+        f = open(self.PATH + filename, 'rb')
+        m = MultipartEncoder({'image': (f.name, f, 'text/plain')})
         try:
-            filename = self.copy_image()
+            requests.post(self.URL, data=m, headers={'Content-Type': m.content_type})
         except:
-            filename = self.ERROR_STATUS
-            print(filename)
-
-        return filename
+            print("Post is Failed, maybe Server is Down or URL is incorrect.")
 
 # test code
 # sc = screen()
