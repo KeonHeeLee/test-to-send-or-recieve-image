@@ -27,3 +27,66 @@ if __name__ == "__main__":
 - Sending image file was success, but seding speed was very slow.
 - I think that this situation was likely to occur by thread issue.
 - If possible, I want to find another python module.
+
+
+## 2018-05-29 result
+
+- Binary File I/O (Rendering)
+
+```java
+            try {
+                this.writer = new PrintWriter(this.out);
+                File f = new File(file_static_path + this.request_path);
+                long flen = f.length();
+                this.response.putHeader("Content-Length", Long.toString(flen));
+                this.response.putHeader("Cache-Control","no-cache");
+
+                String res = this.response.set();
+                this.writer.append(res);
+                this.writer.flush();
+
+                byte[] b = new byte[MAXLEN];
+                FileInputStream fis = new FileInputStream(file_static_path + this.request_path);
+                int len = fis.read(b,0,MAXLEN);
+                while (len != -1) {
+                    this.out.write(b, 0, len);
+                    len = fis.read(b);
+                }
+
+                this.out.flush();
+                this.writer.close();
+                fis.close();
+            } catch (FileNotFoundException e) {
+                this.sendFobiddenMessage();
+            }
+```
+
+- Binary File I/O upload & download (Multipart)
+
+```java
+            try {
+                this.writer = new PrintWriter(this.out);
+                File f = new File(file_static_path + this.request_path);
+                long flen = f.length();
+                this.response.putHeader("Content-Type", "multipart/form-data; boundary=december");
+                this.response.putHeader("Content-Length", Long.toString(flen));
+                this.response.putHeader("Cache-Control","no-cache");
+                String res = this.response.set();
+                this.writer.append(res);
+                this.writer.flush();
+                
+                byte[] b = new byte[MAXLEN];
+                FileInputStream fis = new FileInputStream(file_static_path + this.request_path);
+                int len = fis.read(b,0,MAXLEN);
+                while (len != -1) {
+                    this.out.write(b, 0, len);
+                    len = fis.read(b);
+                }
+                
+                this.out.flush();
+                this.writer.close();
+                fis.close();
+            } catch (FileNotFoundException e) {
+                this.sendFobiddenMessage();
+            }
+```
